@@ -16,18 +16,22 @@ app.get('/posts', (req, res) => {
 app.post('/posts', async (req, res) => {
     const id = randomBytes(4).toString('hex')
     const title = req.body.title
-    const post ={
-
-    } 
-
+    const post = {
+        id: id,
+        title
+    }
     posts.push(post)
 
-    axios.post('http://localhost:5005',{
+    axios.post('http://localhost:5005/events',{
         type: 'PostCreated',
         data: post
-    } ) catch ((err){
-        console.log('Received Event: ', err.message)
+    }).catch((err) => {
+        console.log('Error sending event to event bus: ', err.message)
     });
+
+    res.status(201).json({
+        post: post
+    })
 })
 
 app.post('/events', (req, res) => {
