@@ -24,7 +24,7 @@ app.post('/posts/:id/comments', async (req, res) => {
     commentsByPostId[req.params.id] = comments
 
     try {
-        await axios.post('http://localhost:5005/events', {
+        await axios.post('http://event-bus-srv:5005/events', {
             type: 'CommentCreated',            
             data: { id: commentId, content, postId: req.params.id, status: 'pending' }
         });
@@ -48,9 +48,8 @@ app.post('/events', async (req, res) => {
             data: { id, postId, content, status }
         });
     }
-    res.send({})
     console.log("Received event: ", req.body)
-    res.json({})
+    res.send({})
 })
 
 app.listen(5001, () => {
