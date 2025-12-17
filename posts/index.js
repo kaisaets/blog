@@ -13,7 +13,7 @@ app.get('/posts', (req, res) => {
     res.json(posts)
 })
 
-app.post('/posts', async (req, res) => {
+app.post('/posts/create', async (req, res) => {
     const id = randomBytes(4).toString('hex')
     const title = req.body.title
     const post = {
@@ -41,4 +41,10 @@ app.post('/events', (req, res) => {
 
 app.listen(5000, () => {
     console.log('Posts service running on 5000')
+// [MermaidChart: 8bad46e9-68f7-4b34-bfe4-c7137e9734d2]
+// [MermaidChart: 8bad46e9-68f7-4b34-bfe4-c7137e9734d2]
+// [MermaidChart: 8bad46e9-68f7-4b34-bfe4-c7137e9734d2]
+// [MermaidChart: 8bad46e9-68f7-4b34-bfe4-c7137e9734d2]
+// [MermaidChart: 8bad46e9-68f7-4b34-bfe4-c7137e9734d2]
+// [MermaidChart: 8bad46e9-68f7-4b34-bfe4-c7137e9734d2]
 })
