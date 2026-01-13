@@ -25,6 +25,10 @@ app.post('/events', (req, res) =>{
     res.json({ status: 'OK'});
 } )
 
+app.get('/events', (req, res) => {
+    res.json(events)
+})
+
 app.listen(5005, () => {
     console.log('event-bus service')
     console.log('server running on http://localhost:5005')

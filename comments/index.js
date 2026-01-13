@@ -6,7 +6,26 @@ const { randomBytes } = require('crypto')
 
 const app = express()
 app.use(bodyParser.json())
-app.use(cors())
+//app.use(cors())
+
+const allowedOrigins = [
+  "https://blog.local",
+  "http://blog.local",
+  "http://localhost:3000",
+];
+
+const corsOptions = {
+  origin: (origin, cb) => {
+    if (!origin) return cb(null, true);
+    if (allowedOrigins.includes(origin)) return cb(null, true);
+    return cb(new Error("CORS blocked: " + origin));
+  },
+  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+  allowedHeaders: ["Content-Type", "Authorization"],
+  credentials: false,
+};
+
+app.use(cors(corsOptions));
 
 const commentsByPostId = {}
 
@@ -43,7 +62,7 @@ app.post('/events', async (req, res) => {
         const comment = comments.find(comment => comment.id === id)
         comment.status = status
 
-        await axios.post('http://localhost:5005/events', {
+        await axios.post('http://event-bus-srv:5005/events', {
             type: 'CommentUpdated',
             data: { id, postId, content, status }
         });

@@ -1,0 +1,33 @@
+---
+id: 9b520c27-cadc-4bae-964e-5c07eb3e4be0
+---
+flowchart TD
+    subgraph API Server
+        A["Client (Frontend or API Consumer)"]
+        B[/"GET /posts"/]
+        C[/"POST /posts"/]
+        D[/"POST /events"/]
+        E[(posts array)]
+        F["randomBytes(4)\ncreate id"]
+        G["Create post object"]
+        H{"Event Bus\n(event-bus-srv:5005)"}
+    end
+
+    A -->|Request| B
+    B -->|Return posts| E
+    
+    A -->|Request| C
+    C --> F
+    F --> G
+    G --> E
+    E -->|Append| G
+    G -->|POST /events| H
+    H -->|Event: PostCreated| D
+    D -->|Log: Received event| API_Server
+    
+    %% Internal routes
+    D -.->|Any Event| E
+    
+    %% Styling/API grouping
+    classDef api fill:#def,stroke:#333,stroke-width:2px;
+    class B,C,D api

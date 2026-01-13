@@ -5,7 +5,27 @@ const axios = require('axios')
 
 const app = express();
 app.use(express.json());
-app.use(cors({ origin: 'http://localhost:3000'}))
+
+//app.use(cors({ origin: 'http://localhost:3000'}))
+
+const allowedOrigins = [
+    "https://blog.local",
+    "http://blog.local",
+    "http://localhost:3000",
+] ;
+
+const corsOptions = {
+    origin: (origin, cb) => {
+        if (!origin) return cb(null, true);
+        if (allowedOrigins.includes(origin)) return cb(null, true);
+        return cb(new Error("CORS blocked: " + origin));
+    },
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization"],
+    credentials: false,  
+};
+
+app.use(cors(corsOptions));
 
 const posts =[] 
 
@@ -13,7 +33,7 @@ app.get('/posts', (req, res) => {
     res.json(posts)
 })
 
-app.post('/posts', async (req, res) => {
+app.post('/posts/create', async (req, res) => {
     const id = randomBytes(4).toString('hex')
     const title = req.body.title
     const post = {
@@ -41,4 +61,10 @@ app.post('/events', (req, res) => {
 
 app.listen(5000, () => {
     console.log('Posts service running on 5000')
+// [MermaidChart: 8bad46e9-68f7-4b34-bfe4-c7137e9734d2]
+// [MermaidChart: 8bad46e9-68f7-4b34-bfe4-c7137e9734d2]
+// [MermaidChart: 8bad46e9-68f7-4b34-bfe4-c7137e9734d2]
+// [MermaidChart: 8bad46e9-68f7-4b34-bfe4-c7137e9734d2]
+// [MermaidChart: 8bad46e9-68f7-4b34-bfe4-c7137e9734d2]
+// [MermaidChart: 8bad46e9-68f7-4b34-bfe4-c7137e9734d2]
 })

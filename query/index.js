@@ -3,7 +3,26 @@ const cors = require('cors')
 
 const app = express()
 app.use(express.json())
-app.use(cors({ origin: 'http://localhost:3000' }))
+// app.use(cors({ origin: 'http://localhost:3000' }))
+
+const allowedOrigins = [
+  "https://blog.local",
+  "http://blog.local",
+  "http://localhost:3000",
+];
+
+const corsOptions = {
+  origin: (origin, cb) => {
+    if (!origin) return cb(null, true);
+    if (allowedOrigins.includes(origin)) return cb(null, true);
+    return cb(new Error("CORS blocked: " + origin));
+  },
+  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+  allowedHeaders: ["Content-Type", "Authorization"],
+  credentials: false,
+};
+
+app.use(cors(corsOptions));
 
 const posts = {}
 
@@ -20,7 +39,7 @@ app.post('/events', (req, res) => {
     }
 
     if (req.body.type === 'CommentCreated') {
-        const { id, content, postId } = req.body.data
+        const { id, content, postId } = data
         const post = posts[postId]
         post.comments.push({ id, content})
     }
